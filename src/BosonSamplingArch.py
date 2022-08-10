@@ -5,7 +5,7 @@ class FockProb:
     def __init__(self, data) -> None:
         self.data = data
         self.fock_dict = self._fock_states()
-        self.entropy_val = self._entropy(self.fock_dict.values())
+        self.entropy_val = self._entropy()
     
     def _fock_states(self):
         fock_dict = {}
@@ -16,5 +16,5 @@ class FockProb:
         
         return fock_dict
     
-    def _entropy(probability):
-        return np.sum([-i*np.log(i) for i in probability])
+    def _entropy(self):
+        return np.sum([-i*np.log(i) for i in list(self.fock_dict.values())])
