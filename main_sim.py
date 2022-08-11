@@ -13,17 +13,25 @@ def bose_sampling_sim(seed):
     with boson_sampling_sim.context as q:
 
         ops.Fock(1) | q[0]
-        ops.Fock(1) | q[1]
-        ops.Fock(1) | q[2]
+        ops.Fock(0) | q[1]
+        ops.Fock(0) | q[2]
         ops.Fock(0) | q[3]
 
-        ops.BSgate(np.pi/4, 0.0) | (q[0], q[1])
-        ops.BSgate(np.pi/4, 0.0) | (q[2], q[3])
+        # ops.BSgate(np.pi/4, 0.0) | (q[0], q[1])
+        # ops.BSgate(np.pi/4, 0.0) | (q[2], q[3])
 
-        ops.BSgate(np.pi/4, 0.0) | (q[1], q[2])
+        # ops.BSgate(np.pi/4, 0.0) | (q[1], q[2])
 
-        ops.BSgate(np.pi/4, 0.0) | (q[0], q[1])
-        ops.BSgate(np.pi/4, 0.0) | (q[2], q[3])
+        # ops.BSgate(np.pi/4, 0.0) | (q[0], q[1])
+        # ops.BSgate(np.pi/4, 0.0) | (q[2], q[3])
+
+        ops.BSgate(1.3517088, np.pi/2) | (q[0], q[1])
+        ops.BSgate(0.7853982, np.pi/2) | (q[2], q[3])
+
+        ops.BSgate(0.99084985, np.pi/2) | (q[1], q[2])
+
+        ops.BSgate(0.3859526, np.pi/2) | (q[0], q[1])
+        ops.BSgate(0.7853982, np.pi/2) | (q[2], q[3])
 
         ops.MeasureFock() | q
     
@@ -35,7 +43,7 @@ def bose_sampling_sim(seed):
 
 def main():
 
-    N = 10**5
+    N = 10**4
     np.random.seed(42)
     seeds = np.random.randint(N, size=N)
 
@@ -44,6 +52,6 @@ def main():
 
     output_strs = list(filter(lambda i: i != '', output_strs))
     
-    np.save("./output.npy", output_strs)
+    np.save("data/output_tf.npy", output_strs)
 
 main()
