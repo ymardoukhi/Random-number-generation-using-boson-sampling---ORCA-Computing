@@ -1,39 +1,27 @@
 import numpy as np
 import json
 import strawberryfields as sf
-from strawberryfields import ops
 from src.BosonSamplingArch import FockProb
+from src.Architecture import SFArchitecture
 
 def exact_bose_samp():
 
-    eng = sf.Engine(backend="fock", backend_options={"cutoff_dim": 4})
+    n_photos = 3
+    modes = 4
+    depth = 3
+    ver = 0
+    theta_num = 5
 
-    boson_sampling = sf.Program(4)
+    arch = SFArchitecture(n_photos, modes, depth, theta_num, ver)
+    eng = sf.Engine(backend="fock", backend_options={"cutoff_dim": n_photos+1})
 
-    with boson_sampling.context as q:
+    # tf_theta_list = [np.pi/4 for _ in range(5)]
+    tf_theta_list = [5.490799580937497, 6.231214270348368, 0.9528841360440271, 4.193042253237036, 0.04889399082251021]
+    args_dict = {}
+    for i in range(theta_num):
+        args_dict["theta_{}".format(i)] = tf_theta_list[i]
 
-        ops.Fock(1) | q[0]
-        ops.Fock(0) | q[1]
-        ops.Fock(0) | q[2]
-        ops.Fock(0) | q[3]
-
-        # ops.BSgate(np.pi/4, 0.0) | (q[0], q[1])
-        # ops.BSgate(np.pi/4, 0.0) | (q[2], q[3])
-
-        # ops.BSgate(np.pi/4, 0.0) | (q[1], q[2])
-
-        # ops.BSgate(np.pi/4, 0.0) | (q[0], q[1])
-        # ops.BSgate(np.pi/4, 0.0) | (q[2], q[3])
-            
-        ops.BSgate(1.3517088, np.pi/2) | (q[0], q[1])
-        ops.BSgate(0.7853982, np.pi/2) | (q[2], q[3])
-
-        ops.BSgate(0.99084985, np.pi/2) | (q[1], q[2])
-
-        ops.BSgate(0.3859526, np.pi/2) | (q[0], q[1])
-        ops.BSgate(0.7853982, np.pi/2) | (q[2], q[3])
-
-    fock_states_stat = FockProb(eng.run(boson_sampling).state)
+    fock_states_stat = FockProb(eng.run(arch.prog, args=args_dict).state)
     return fock_states_stat
 
 def main():
