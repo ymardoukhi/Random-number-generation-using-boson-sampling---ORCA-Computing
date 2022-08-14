@@ -12,7 +12,7 @@ class SFArchitecture:
         self.bsg_num = bsg_num
         self.prog = self._build_arch()
     
-    def _build_arch(self):
+    def _build_arch(self, simulation):
 
         prog = sf.Program(self.m)
 
@@ -24,7 +24,7 @@ class SFArchitecture:
             ops.Fock(1) | q[0]
             ops.Fock(1) | q[1]
             ops.Fock(1) | q[2]
-            ops.Fock(0) | q[3]
+            ops.Fock(1) | q[3]
 
             ops.BSgate(theta_lst[0], 0.0) | (q[0], q[1])
             ops.BSgate(theta_lst[1], 0.0) | (q[2], q[3])
@@ -33,5 +33,8 @@ class SFArchitecture:
 
             ops.BSgate(theta_lst[3], 0.0) | (q[0], q[1])
             ops.BSgate(theta_lst[4], 0.0) | (q[2], q[3])
+
+            if simulation:
+                ops.MeasureFock | q
 
         return prog
