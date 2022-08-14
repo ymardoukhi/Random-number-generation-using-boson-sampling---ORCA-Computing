@@ -31,11 +31,11 @@ def main():
     parser.add_argument('v', type=int, help='version of the architecture')
     args = parser.parse_args()
 
-    N = 10**4
+    N = 10**3
     np.random.seed(42)
     seeds = np.random.randint(N, size=N)
 
-    output_strs = jb.Parallel(n_jobs=10, verbose=5)(
+    output_strs = jb.Parallel(n_jobs=-1, verbose=5)(
         jb.delayed(naive_uniform_sim)(
             args.n, args.m, args.d, args.n_param,
             args.v, True, seed
