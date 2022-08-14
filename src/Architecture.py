@@ -35,6 +35,6 @@ class SFArchitecture:
             ops.BSgate(theta_lst[4], 0.0) | (q[2], q[3])
 
             if simulation:
-                ops.MeasureFock | q
+                ops.MeasureFock() | q
 
         return prog
