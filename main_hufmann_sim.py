@@ -1,0 +1,57 @@
+import argparse
+import json
+import numpy as np
+import joblib as jb
+import strawberryfields as sf
+from src.Architecture import SFArchitecture
+from src.BoseSampSimulation import BoseSampSim
+from src.Huffman import HuffmanEncoding
+
+def hufmann_uniform_sim(n, m, d, num_params, v, sim_bool, encoding, seed):
+    np.random.seed(seed)
+
+    arch = SFArchitecture(n, m, d, num_params, v, sim_bool)
+    eng = sf.Engine(backend="fock", backend_options={"cutoff_dim": n+1})
+
+    tf_theta_list = [np.pi/4 for _ in range(num_params)]
+    args_dict = {}
+    for i in range(num_params):
+        args_dict["theta_{}".format(i)] = tf_theta_list[i]
+
+    bose_sim = BoseSampSim(programme=arch.prog, engine=eng, params_dict=args_dict, encoding=encoding)
+    bose_sim.hufmann_simulation(30)
+    bose_sim.von_neumann_prot()
+    
+    return bose_sim.von_neumann_str
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('n', type=int, help='number of photos')
+    parser.add_argument('m', type=int, help='number of modes')
+    parser.add_argument('d', type=int, help='depth of the circuit')
+    parser.add_argument('n_param', type=int, help='number of beam-spliters')
+    parser.add_argument('v', type=int, help='version of the architecture')
+    args = parser.parse_args()
+
+    N = 10**3
+
+    with open("data/exact_dist_tf.json", "r") as f:
+        fock_state_dist = json.load(f)
+    
+    encoding = HuffmanEncoding(fock_state_dist)
+    encoding.huffman_encoding()
+
+    np.random.seed(42)
+    seeds = np.random.randint(N, size=N)
+
+    output_strs = jb.Parallel(n_jobs=-1, verbose=5)(
+        jb.delayed(hufmann_uniform_sim)(
+            args.n, args.m, args.d, args.n_param,
+            args.v, True, encoding.encoding, seed
+            ) for seed in seeds)
+
+    output_strs = list(filter(lambda i: i != '', output_strs))
+    
+    np.save("data/huffman_uniform.npy", output_strs)
+
+main()
