@@ -1,10 +1,9 @@
 import argparse
 import numpy as np
-import strawberryfields as sf
-from strawberryfields import ops
 import joblib as jb
-from src.BoseSampSimulation import BoseSampSim
+import strawberryfields as sf
 from src.Architecture import SFArchitecture
+from src.BoseSampSimulation import BoseSampSim
 
 def naive_uniform_sim(n, m, d, num_params, v, sim_bool, seed):
     np.random.seed(seed)
