@@ -14,10 +14,12 @@ class BoseSampSim:
 
     def two_shot_simulation(self):
         res = []
-        for i in range(2):
-            output = self.engine.run(self.programme).samples[0]
-            res.append(self._convert_binary(output))
-        
+        for _ in range(2):
+            output = self.engine.run(self.programme, args=self.args).samples[0]
+            bin_output = self._convert_binary(output)
+            bin_output = "".join(list(map(str, bin_output)))
+            res.append(bin_output)
+
         self.two_shots = res
 
     def _hufmann_str(self):
@@ -41,10 +43,13 @@ class BoseSampSim:
 
     def von_neumann_prot(self):
         output_res = ''
-        for i in range(len(self.two_shots[0])):
+        upper_bound = min(len(self.two_shots[0]), len(self.two_shots[1]))
+        for i in range(upper_bound):
             if self.two_shots[0][i] == self.two_shots[1][i]:
                 continue
             else:
-                digit = abs(self.two_shots[0][i]*(self.two_shots[1][i]-1))
+                digit = abs(
+                    int(self.two_shots[0][i])*(int(self.two_shots[1][i])-1)
+                    )
                 output_res = output_res + str(digit)
         self.von_neumann_str = output_res
