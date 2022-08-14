@@ -4,13 +4,13 @@ from strawberryfields import ops
 
 class SFArchitecture:
 
-    def __init__(self, n, m, d, bsg_num, v) -> None:
+    def __init__(self, n, m, d, bsg_num, v, sim_bool) -> None:
         self.n = n
         self.m = m
         self.d = d
         self.v = v
         self.bsg_num = bsg_num
-        self.prog = self._build_arch()
+        self.prog = self._build_arch(sim_bool)
     
     def _build_arch(self, simulation):
 
