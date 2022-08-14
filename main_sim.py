@@ -1,41 +1,23 @@
+import argparse
 import numpy as np
 import strawberryfields as sf
 from strawberryfields import ops
 import joblib as jb
 from src.BoseSampSimulation import BoseSampSim
+from src.Architecture import SFArchitecture
 
-def bose_sampling_sim(seed):
+def naive_uniform_sim(n, m, d, num_params, v, sim_bool, seed):
     np.random.seed(seed)
-    eng = sf.Engine(backend="fock", backend_options={"cutoff_dim": 4})
 
-    boson_sampling_sim = sf.Program(4)
+    arch = SFArchitecture(n, m, d, num_params, v, sim_bool)
+    eng = sf.Engine(backend="fock", backend_options={"cutoff_dim": n+1})
 
-    with boson_sampling_sim.context as q:
+    tf_theta_list = [np.pi/4 for _ in range(num_params)]
+    args_dict = {}
+    for i in range(num_params):
+        args_dict["theta_{}".format(i)] = tf_theta_list[i]
 
-        ops.Fock(1) | q[0]
-        ops.Fock(0) | q[1]
-        ops.Fock(0) | q[2]
-        ops.Fock(0) | q[3]
-
-        # ops.BSgate(np.pi/4, 0.0) | (q[0], q[1])
-        # ops.BSgate(np.pi/4, 0.0) | (q[2], q[3])
-
-        # ops.BSgate(np.pi/4, 0.0) | (q[1], q[2])
-
-        # ops.BSgate(np.pi/4, 0.0) | (q[0], q[1])
-        # ops.BSgate(np.pi/4, 0.0) | (q[2], q[3])
-
-        ops.BSgate(1.3517088, np.pi/2) | (q[0], q[1])
-        ops.BSgate(0.7853982, np.pi/2) | (q[2], q[3])
-
-        ops.BSgate(0.99084985, np.pi/2) | (q[1], q[2])
-
-        ops.BSgate(0.3859526, np.pi/2) | (q[0], q[1])
-        ops.BSgate(0.7853982, np.pi/2) | (q[2], q[3])
-
-        ops.MeasureFock() | q
-    
-    bose_sim = BoseSampSim(programme=boson_sampling_sim, engine=eng)
+    bose_sim = BoseSampSim(programme=arch.prog, engine=eng, params_dict=args_dict)
     bose_sim.two_shot_simulation()
     bose_sim.von_neumann_prot()
     
