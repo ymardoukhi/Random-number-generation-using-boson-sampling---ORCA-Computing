@@ -1,31 +1,32 @@
-import numpy as np
 import json
+import argparse
+import numpy as np
 import strawberryfields as sf
 from src.BosonSamplingArch import FockProb
 from src.Architecture import SFArchitecture
 
-def exact_bose_samp():
+def exact_bose_samp(n, m, d, n_param, v):
 
-    n_photos = 3
-    modes = 4
-    depth = 3
-    ver = 0
-    theta_num = 5
+    arch = SFArchitecture(n, m, d, n_param, v)
+    eng = sf.Engine(backend="fock", backend_options={"cutoff_dim": n+1})
 
-    arch = SFArchitecture(n_photos, modes, depth, theta_num, ver)
-    eng = sf.Engine(backend="fock", backend_options={"cutoff_dim": n_photos+1})
-
-    # tf_theta_list = [np.pi/4 for _ in range(5)]
-    tf_theta_list = [5.490799580937497, 6.231214270348368, 0.9528841360440271, 4.193042253237036, 0.04889399082251021]
+    tf_theta_list = [np.pi/4 for _ in range(n_param)]
     args_dict = {}
-    for i in range(theta_num):
+    for i in range(n_param):
         args_dict["theta_{}".format(i)] = tf_theta_list[i]
 
     fock_states_stat = FockProb(eng.run(arch.prog, args=args_dict).state)
     return fock_states_stat
 
 def main():
-    fock_states = exact_bose_samp()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('n', type=int, help='number of photos')
+    parser.add_argument('m', type=int, help='number of modes')
+    parser.add_argument('d', type=int, help='depth of the circuit')
+    parser.add_argument('n_param', type=int, help='number of beam-spliters')
+    parser.add_argument('v', type=int, help='version of the architecture')
+    args = parser.parse_args()
+    fock_states = exact_bose_samp(args.n, args.m, args.d, args.n_param, args.v)
     
     with open("data/exact_dist_tf.json", "w") as f:
         json.dump(fock_states.fock_dict, f)
