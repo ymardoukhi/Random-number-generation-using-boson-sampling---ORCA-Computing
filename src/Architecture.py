@@ -4,7 +4,7 @@ from strawberryfields import ops
 
 class SFArchitecture:
 
-    def __init__(self, n, m, d, bsg_num, v, sim_bool) -> None:
+    def __init__(self, n, m, d, bsg_num, v, sim_bool=False) -> None:
         self.n = n
         self.m = m
         self.d = d
