@@ -53,6 +53,9 @@ class SFArchitecture:
             ops.BSgate(theta_lst[3], 0.0) | (q[0], q[1])
             ops.BSgate(theta_lst[4], 0.0) | (q[2], q[3])
 
+            # if we want to perform simulations we do 
+            # measurement in the end, otherwise we are 
+            # interested in full probability distribution
             if simulation:
                 ops.MeasureFock() | q
 
