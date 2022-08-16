@@ -1,10 +1,23 @@
-import numpy as np
 import strawberryfields as sf
 from strawberryfields import ops
 
 class SFArchitecture:
+    """
+    class to setup the architecture of the interferometer. Currently 
+    the archictercture must be changed within the source file. But I 
+    aim to compile the architecture via txt files
+    """
 
-    def __init__(self, n, m, d, bsg_num, v, sim_bool=False) -> None:
+    def __init__(self, n: int, m: int, d: int, bsg_num: int, v: int, sim_bool: bool=False) -> None:
+        """
+        initialising the SFArchitecture object
+        input:
+            n (int): number of the input photos
+            m (int): number of modes
+            d (int): depth of the circuit
+            bsg_num (int): number of beam splitters
+            sim_bool (bool): whether the architecture is used for simulation
+        """
         self.n = n
         self.m = m
         self.d = d
@@ -12,10 +25,16 @@ class SFArchitecture:
         self.bsg_num = bsg_num
         self.prog = self._build_arch(sim_bool)
     
-    def _build_arch(self, simulation):
+    def _build_arch(self, simulation: bool) -> sf.program.Program:
+        """
+        function that builds the Strawberry Fields programme
 
+        """
+
+        # initialise the programme by indicating the number of modes
         prog = sf.Program(self.m)
 
+        # create programme parameters for the theta angle of the beam splitters
         theta_params = ["theta_{}".format(i) for i in range(self.bsg_num)]
         theta_lst = prog.params(*theta_params)
 
