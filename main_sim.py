@@ -52,6 +52,11 @@ def main():
             True, seed) for seed in seeds)
 
     output_strs = list(filter(lambda i: i != '', output_strs))
+    ratio = one_zero_ratio("".join(output_strs))
+    output_strs = Counter(output_strs)
+    output_strs = [(key, val) for key, val in output_strs.items()]
+    output_strs.sort(key=lambda x: x[1], reverse=True)
+    output_strs = {el[0]: el[1]/args.N for el in output_strs}
     
     output_path = "./data/n{}_m{}_nparam{}_v{}".format(args.n, args.m, args.n_param, args.v)
     if not os.path.exists(output_path):
