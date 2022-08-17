@@ -45,11 +45,11 @@ def main():
     np.random.seed(42)
     seeds = np.random.randint(args.N, size=args.N)
 
-    output_strs = jb.Parallel(n_jobs=-1, verbose=5)(
-        jb.delayed(naive_uniform_sim)(
-            args.n, args.m, args.d, args.n_param,
-            args.v, True, seed
-            ) for seed in seeds)
+    print("Simulation has started for {} runs".format(args.N))
+    output_strs = jb.Parallel(n_jobs=-2, verbose=5)(
+        jb.delayed(von_neumann_sim)(
+            args.n, args.m, args.n_param, args.v,
+            True, seed) for seed in seeds)
 
     output_strs = list(filter(lambda i: i != '', output_strs))
     
