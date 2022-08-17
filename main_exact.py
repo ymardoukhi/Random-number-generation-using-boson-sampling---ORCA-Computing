@@ -3,7 +3,7 @@ import json
 import argparse
 import numpy as np
 import strawberryfields as sf
-from src.BosonSamplingArch import FockProb
+from src.BosonSamplingStat import FockProb
 from src.Architecture import SFArchitecture
 
 def exact_bose_samp(n, m, n_param, v):
