@@ -8,19 +8,18 @@ class SFArchitecture:
     aim to compile the architecture via txt files
     """
 
-    def __init__(self, n: int, m: int, d: int, bsg_num: int, v: int, sim_bool: bool=False) -> None:
+    def __init__(self, n: int, m: int, bsg_num: int, v: int, sim_bool: bool=False) -> None:
         """
         initialising the SFArchitecture object
         input:
             n (int): number of the input photos
             m (int): number of modes
-            d (int): depth of the circuit
             bsg_num (int): number of beam splitters
+            v (int): version of the architecture to distinguish its variations
             sim_bool (bool): whether the architecture is used for simulation
         """
         self.n = n
         self.m = m
-        self.d = d
         self.v = v
         self.bsg_num = bsg_num
         self.prog = self._build_arch(sim_bool)
