@@ -1,3 +1,4 @@
+import os
 import json
 import argparse
 import numpy as np
@@ -28,7 +29,10 @@ def main():
     args = parser.parse_args()
     fock_states = exact_bose_samp(args.n, args.m, args.d, args.n_param, args.v)
     
-    with open("data/exact_dist_tf.json", "w") as f:
+    output_path = "./data/n{}_m{}_nparam{}_v{}".format(args.n, args.m, args.n_param, args.v)
+    if not os.path.exists(output_path):
+        os.mkdir(output_path)
+    with open("{}/exact_result.json".format(output_path), "w") as f:
         json.dump(fock_states.fock_dict, f)
 
 main()
