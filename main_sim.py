@@ -1,7 +1,10 @@
+import os
+import json
 import argparse
 import numpy as np
 import joblib as jb
 import strawberryfields as sf
+from collections import Counter
 from src.Architecture import SFArchitecture
 from src.BoseSampSimulation import BoseSampSim
 
@@ -43,6 +46,13 @@ def main():
 
     output_strs = list(filter(lambda i: i != '', output_strs))
     
-    np.save("data/output_tf.npy", output_strs)
+    output_path = "./data/n{}_m{}_nparam{}_v{}".format(args.n, args.m, args.n_param, args.v)
+    if not os.path.exists(output_path):
+        os.mkdir(output_path)
+    with open("{}/simulation_result.json".format(output_path), "w") as f:
+        json.dump(output_strs, f)
+    with open("{}/ratio_simulation.json".format(output_path), "w") as f:
+        json.dump(ratio, f)
+
 
 main()
