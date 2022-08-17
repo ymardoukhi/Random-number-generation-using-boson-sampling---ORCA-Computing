@@ -26,7 +26,12 @@ def von_neumann_sim(n, m, num_params, v, sim_bool, seed):
     von_neumann_enc = VonNeumann()
     von_neumann_str = von_neumann_enc.von_neumann_prot(shots)
     
-    return bose_sim.von_neumann_str
+    return von_neumann_str
+
+def one_zero_ratio(binary_string: str) -> dict:
+    binary_arr = np.asarray([*binary_string], dtype=int)
+    ratio = np.sum(binary_arr)/binary_arr.shape[0]
+    return {'0': 1-ratio, '1': ratio}
 
 def main():
     parser = argparse.ArgumentParser()
