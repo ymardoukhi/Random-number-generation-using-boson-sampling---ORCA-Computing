@@ -8,10 +8,10 @@ from collections import Counter
 from src.Architecture import SFArchitecture
 from src.PostProcessing import VonNeumann
 
-def naive_uniform_sim(n, m, d, num_params, v, sim_bool, seed):
+def von_neumann_sim(n, m, num_params, v, sim_bool, seed):
     np.random.seed(seed)
 
-    arch = SFArchitecture(n, m, d, num_params, v, sim_bool)
+    arch = SFArchitecture(n, m, num_params, v, sim_bool)
     eng = sf.Engine(backend="fock", backend_options={"cutoff_dim": n+1})
 
     tf_theta_list = [np.pi/4 for _ in range(num_params)]
@@ -32,14 +32,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('n', type=int, help='number of photos')
     parser.add_argument('m', type=int, help='number of modes')
-    parser.add_argument('d', type=int, help='depth of the circuit')
     parser.add_argument('n_param', type=int, help='number of beam-spliters')
     parser.add_argument('v', type=int, help='version of the architecture')
+    parser.add_argument('N', type=int, help="total number of runs")
     args = parser.parse_args()
 
-    N = 10**3
     np.random.seed(42)
-    seeds = np.random.randint(N, size=N)
+    seeds = np.random.randint(args.N, size=args.N)
 
     output_strs = jb.Parallel(n_jobs=-1, verbose=5)(
         jb.delayed(naive_uniform_sim)(
