@@ -6,7 +6,7 @@ import joblib as jb
 import strawberryfields as sf
 from collections import Counter
 from src.Architecture import SFArchitecture
-from src.BoseSampSimulation import BoseSampSim
+from src.PostProcessing import VonNeumann
 
 def naive_uniform_sim(n, m, d, num_params, v, sim_bool, seed):
     np.random.seed(seed)
@@ -18,10 +18,13 @@ def naive_uniform_sim(n, m, d, num_params, v, sim_bool, seed):
     args_dict = {}
     for i in range(num_params):
         args_dict["theta_{}".format(i)] = tf_theta_list[i]
+    
+    shots = []
+    for _ in range(2):
+        shots.append(eng.run(program=arch.prog, args=args_dict).samples[0])
 
-    bose_sim = BoseSampSim(programme=arch.prog, engine=eng, params_dict=args_dict)
-    bose_sim.two_shot_simulation()
-    bose_sim.von_neumann_prot()
+    von_neumann_enc = VonNeumann()
+    von_neumann_str = von_neumann_enc.von_neumann_prot(shots)
     
     return bose_sim.von_neumann_str
 
