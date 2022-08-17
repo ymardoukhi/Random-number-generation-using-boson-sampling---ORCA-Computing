@@ -67,4 +67,5 @@ def main():
         json.dump(ratio, f)
 
 
-main()
+if __name__ == "__main__":
+    main()
