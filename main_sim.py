@@ -93,9 +93,9 @@ def main():
     output_path = "./data/n{}_m{}_nparam{}_v{}".format(args.n, args.m, args.n_param, args.v)
     if not os.path.exists(output_path):
         os.mkdir(output_path)
-    with open("{}/simulation_result.json".format(output_path), "w") as f:
+    with open("{}/simulation_result_{}.json".format(output_path, args.N), "w") as f:
         json.dump(output_strs, f)
-    with open("{}/ratio_simulation.json".format(output_path), "w") as f:
+    with open("{}/ratio_simulation_{}.json".format(output_path.args.N), "w") as f:
         json.dump(ratio, f)
 
 
