@@ -1,55 +1,50 @@
-import numpy as np
 import json
+import argparse
 import matplotlib.pyplot as plt
-from collections import Counter
 import matplotlib.ticker as mticker
 
 
-res = np.load("data/output_tf.npy")
-res = Counter(res)
-total_count = np.sum(list(res.values()))
-vals = [i/total_count for i in list(res.values())]
+def main():
 
-fig = plt.figure(figsize=(16, 8))
-ax = fig.add_subplot(111)
-ax.bar(list(res.keys()), vals)
-ticks_loc = list(ax.get_xticks())
-ax.xaxis.set_major_locator(mticker.FixedLocator(ticks_loc))
-ax.set_xticklabels(list(res.keys()), rotation = 90)
-ax.set_ylabel("Probability")
-ax.set_xlabel("von Neumann Strings")
-plt.savefig("data/von_neumann_dist_tf.png")
-plt.close(fig)
+    # parse the input arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('n', type=int, help='number of photos')
+    parser.add_argument('m', type=int, help='number of modes')
+    parser.add_argument('n_param', type=int, help='number of beam-spliters')
+    parser.add_argument('v', type=int, help='version of the architecture')
+    parser.add_argument('filename', type=str, help='the name of the json file')
+    parser.add_argument('outputfile', type=str, help='path to the output file')
+    args = parser.parse_args()
 
-res = np.load("data/huffman_uniform.npy")
-res = Counter(res)
-total_count = np.sum(list(res.values()))
-vals = [i/total_count for i in list(res.values())]
+    directory = "data/n{}_m{}_nparam{}_v{}/".format(args.n, args.m, args.n_param, args.v)
+    # relative path to the json file and
+    # relative path to the image file
+    input_path = directory + args.filename
+    output_path = directory + args.outputfile
 
-fig = plt.figure(figsize=(16, 8))
-ax = fig.add_subplot(111)
-ax.bar(list(res.keys()), vals)
-ticks_loc = list(ax.get_xticks())
-ax.xaxis.set_major_locator(mticker.FixedLocator(ticks_loc))
-ax.set_xticklabels(list(res.keys()), rotation = 90)
-ax.set_ylabel("Probability")
-ax.set_xlabel("von Neumann Strings")
-plt.savefig("data/huffman_dist.png")
-plt.close(fig)
+    # load the json file containing the probabilities
+    with open(input_path, "r") as f:
+        res = json.load(f)
+    
+    # x-axis is either the fock states or the binary strings
+    # y-axis is the associated probabilities
+    x = list(res.keys())
+    y = list(res.values())
 
-with open("data/exact_dist_tf.json", "r") as f:
-    res = json.load(f)
+    # bar plot of the probabilities
+    fig = plt.figure(figsize=(16, 8))
+    ax = fig.add_subplot(111)
+    ax.bar(x, y)
+    ticks_loc = list(ax.get_xticks())
+    ax.xaxis.set_major_locator(mticker.FixedLocator(ticks_loc))
+    ax.set_xticklabels(x, rotation = 90)
+    ax.set_ylabel("Probability")
+    if "simulation" in args.filename:
+        ax.set_xlabel("Binary Strings")
+    else:
+        ax.set_xlabel("Fock States")
+    plt.savefig(output_path)
+    plt.close(fig)
 
-total_count = np.sum(list(res.values()))
-vals = [i/total_count for i in list(res.values())]
-
-fig = plt.figure(figsize=(16, 8))
-ax = fig.add_subplot(111)
-ax.bar(list(res.keys()), vals)
-ticks_loc = list(ax.get_xticks())
-ax.xaxis.set_major_locator(mticker.FixedLocator(ticks_loc))
-ax.set_xticklabels(list(res.keys()), rotation = 90)
-ax.set_ylabel("Probability")
-ax.set_xlabel("Fock States")
-plt.savefig("data/Fock_dist_tf.png")
-plt.close(fig)
+if __name__ == "__main__":
+    main()
