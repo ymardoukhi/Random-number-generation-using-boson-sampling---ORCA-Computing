@@ -1,16 +1,17 @@
-import argparse
 import json
+import argparse
 import numpy as np
 import joblib as jb
+from collections import Counter
 import strawberryfields as sf
 from src.Architecture import SFArchitecture
-from src.BoseSampSimulation import BoseSampSim
+from src.PostProcessing import Encoding
 from src.Huffman import HuffmanEncoding
 
-def hufmann_uniform_sim(n, m, d, num_params, v, sim_bool, encoding, seed):
+def sample_generator(n: int, m: int, num_params: int, v: int, sim_bool: bool, seed: float):
     np.random.seed(seed)
 
-    arch = SFArchitecture(n, m, d, num_params, v, sim_bool)
+    arch = SFArchitecture(n, m, num_params, v, sim_bool)
     eng = sf.Engine(backend="fock", backend_options={"cutoff_dim": n+1})
 
     tf_theta_list = [np.pi/4 for _ in range(num_params)]
@@ -18,11 +19,15 @@ def hufmann_uniform_sim(n, m, d, num_params, v, sim_bool, encoding, seed):
     for i in range(num_params):
         args_dict["theta_{}".format(i)] = tf_theta_list[i]
 
-    bose_sim = BoseSampSim(programme=arch.prog, engine=eng, params_dict=args_dict, encoding=encoding)
-    bose_sim.hufmann_simulation(30)
-    bose_sim.von_neumann_prot()
-    
-    return bose_sim.von_neumann_str
+    return eng.run(program=arch, args=args_dict).samples[0]
+
+def hufmann_uniform_sim(encoding, fock_state):
+    return encoding[fock_state]
+
+def res_to_dict(result):
+    count_dict = Counter(result)
+    total = sum(list(count_dict.values()))
+    return {key: val/total for key, val in count_dict.items()}
 
 def main():
     parser = argparse.ArgumentParser()
@@ -33,9 +38,9 @@ def main():
     parser.add_argument('v', type=int, help='version of the architecture')
     args = parser.parse_args()
 
-    N = 10**3
+    N = int(1e3)
 
-    with open("data/exact_dist_tf.json", "r") as f:
+    with open("data/exact_dist.json", "r") as f:
         fock_state_dist = json.load(f)
     
     encoding = HuffmanEncoding(fock_state_dist)
@@ -51,7 +56,11 @@ def main():
             ) for seed in seeds)
 
     output_strs = list(filter(lambda i: i != '', output_strs))
-    
-    np.save("data/huffman_uniform.npy", output_strs)
 
-main()
+    output_strs = res_to_dict(output_strs)
+    
+    with open("data/huffman.json", "w") as f:
+        json.dump(output_strs, f)
+
+if __name__ == "__main__":
+    main()
