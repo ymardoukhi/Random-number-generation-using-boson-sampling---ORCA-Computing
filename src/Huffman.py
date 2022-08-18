@@ -1,4 +1,3 @@
-from copy import copy
 import networkx as nx
 
 class HuffmanEncoding:
