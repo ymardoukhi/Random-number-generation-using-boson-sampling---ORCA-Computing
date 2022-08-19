@@ -1,76 +1,113 @@
+import os
+import json
 import numpy as np
+import joblib as jb
+from collections import Counter
 import strawberryfields as sf
 from strawberryfields.tdm import full_compile, get_mode_indices
 from strawberryfields.ops import Sgate, Rgate, BSgate, MeasureFock
+from src.PostProcessing import VonNeumann
 
-eng = sf.RemoteEngine("borealis")
-device = eng.device
+def get_best_matach_params(gate_args_dict):
+    eng = sf.RemoteEngine("borealis")
+    device = eng.device
 
-modes = 4
+    gate_args_list = full_compile(gate_args_dict, device)
 
-# squeezing-gate parameters
-r = [1.234] * modes
+    return gate_args_list
 
-# rotation-gate parameters
-phi_0 = np.asarray([0] * modes)
-phi_1 = np.asarray([0] * modes)
-phi_2 = np.asarray([0] * modes)
+def local_borealis_sim(gate_args_list, n, N, delays):
+    
+    prog = sf.TDMProgram(N)
 
-# beamsplitter parameters
-alpha_0 = np.asarray([np.pi/4] * modes)
-alpha_1 = np.asarray([np.pi/4] * modes)
-alpha_2 = np.asarray([np.pi/4] * modes)
+    with prog.context(*gate_args_list) as (p, q):
+        Sgate(p[0]) | q[n[0]]
+        for i in range(len(delays)):
+            Rgate(p[2 * i + 1]) | q[n[i]]
+            BSgate(p[2 * i + 2], np.pi / 2) | (q[n[i + 1]], q[n[i]])
+        MeasureFock() | q[0]
 
-# the travel time per delay line in time bins
-delays = [1, 6, 36]
+    eng = sf.Engine(backend="gaussian")
+    return eng.run(prog, crop=True).samples[0]
 
-# set the first beamsplitter arguments to 'T=1' ('alpha=0') to fill the
-# loops with pulses
-alpha_0[:delays[0]] = 0.0
-alpha_1[:delays[1]] = 0.0
-alpha_2[:delays[2]] = 0.0
+def one_zero_ratio(binary_string: str) -> dict:
+    binary_arr = np.asarray([*binary_string], dtype=int)
+    ratio = np.sum(binary_arr)/binary_arr.shape[0]
+    return {'0': 1-ratio, '1': ratio}
 
-gate_args = {
-    "Sgate": r,
-    "loops": {
-        0: {"Rgate": phi_0.tolist(), "BSgate": alpha_0.tolist()},
-        1: {"Rgate": phi_1.tolist(), "BSgate": alpha_1.tolist()},
-        2: {"Rgate": phi_2.tolist(), "BSgate": alpha_2.tolist()},
-    },
-}
 
-gate_args_list = full_compile(gate_args, device)
-vac_modes = sum(delays)
+def main():
 
-n, N = get_mode_indices(delays)
-print(n, N)
+    modes = 4
+    shots = int(1e4)
 
-prog = sf.TDMProgram(N)
+    # squeezing-gate parameters
+    r = [1.234] * modes
 
-with prog.context(*gate_args_list) as (p, q):
-    Sgate(p[0]) | q[n[0]]
-    for i in range(len(delays)):
-        Rgate(p[2 * i + 1]) | q[n[i]]
-        BSgate(p[2 * i + 2], np.pi / 2) | (q[n[i + 1]], q[n[i]])
-    MeasureFock() | q[0]
+    # rotation-gate parameters
+    phi_0 = np.asarray([0] * modes)
+    phi_1 = np.asarray([0] * modes)
+    phi_2 = np.asarray([0] * modes)
 
-shots = 10000
-# results = eng.run(prog, shots=shots, crop=True)
-# 
-# samples = results.samples
-# np.save("borealisoutput.npy", samples)
+    # beamsplitter parameters
+    alpha_0 = np.asarray([np.pi/4] * modes)
+    alpha_1 = np.asarray([np.pi/4] * modes)
+    alpha_2 = np.asarray([np.pi/4] * modes)
 
-compile_options = {
-    "device": device,
-    "realistic_loss": True,
-}
+    # the travel time per delay line in time bins
+    delays = [1, 6, 36]
 
-run_options = {
-    "shots": None,
-    "crop": True,
-    "space_unroll": True,
-}
+    # set the first beamsplitter arguments to 'T=1' ('alpha=0') to fill the
+    # loops with pulses
+    alpha_0[:delays[0]] = 0.0
+    alpha_1[:delays[1]] = 0.0
+    alpha_2[:delays[2]] = 0.0
 
-eng_sim = sf.Engine(backend="gaussian")
-# prog.space_unroll(shots=1)
-results_sim = eng_sim.run(prog, crop=True)#**run_options, compile_options=compile_options)
+    gate_args = {
+        "Sgate": r,
+        "loops": {
+            0: {"Rgate": phi_0.tolist(), "BSgate": alpha_0.tolist()},
+            1: {"Rgate": phi_1.tolist(), "BSgate": alpha_1.tolist()},
+            2: {"Rgate": phi_2.tolist(), "BSgate": alpha_2.tolist()},
+        },
+    }
+
+    gate_args_list = get_best_matach_params(gate_args_dict=gate_args)
+
+    n, N = get_mode_indices(delays)
+
+    shots_ensemble = jb.Parallel(n_jobs=-2, verbose=5)(
+        jb.delayed(local_borealis_sim)(gate_args_list, n, N, delays) for _ in range(shots))
+    
+    shots_ensemble = [
+        (shots_ensemble[i][0], shots_ensemble[i+1][0]) 
+        for i in range(len(shots_ensemble) - 1)]
+    
+    neumann_enc = VonNeumann()
+    
+    output_strs = jb.Parallel(n_jobs=-2, verbose=5)(
+        jb.delayed(neumann_enc.von_neumann_prot)(shots) for shots in shots_ensemble)
+    
+    # filter out '' strings
+    output_strs = list(filter(lambda i: i != '', output_strs))
+    # calculate the ratio of 1's and 0's in the concatenation of
+    # all those binary strings
+    ratio = one_zero_ratio("".join(output_strs))
+    # calculate the statistics of the binary strings and sort 
+    # the probability of their appearance in a descending manner
+    output_strs = Counter(output_strs)
+    output_strs = [(key, val) for key, val in output_strs.items()]
+    output_strs.sort(key=lambda x: x[1], reverse=True)
+    output_strs = {el[0]: el[1]/shots/2 for el in output_strs}
+    
+    # save the statistics of 01 ratio and the binary strings
+    output_path = "./data/borealis"
+    if not os.path.exists(output_path):
+        os.mkdir(output_path)
+    with open("{}/local_N{}.json".format(output_path, shots), "w") as f:
+        json.dump(output_strs, f)
+    with open("{}/ratio_local_N{}.json".format(output_path, shots), "w") as f:
+        json.dump(ratio, f)
+
+if __name__ == "__main__":
+    main()
