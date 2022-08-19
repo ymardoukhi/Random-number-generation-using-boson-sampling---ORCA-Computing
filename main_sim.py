@@ -95,7 +95,7 @@ def main():
         os.mkdir(output_path)
     with open("{}/simulation_result_{}.json".format(output_path, args.N), "w") as f:
         json.dump(output_strs, f)
-    with open("{}/ratio_simulation_{}.json".format(output_path.args.N), "w") as f:
+    with open("{}/ratio_simulation_{}.json".format(output_path, args.N), "w") as f:
         json.dump(ratio, f)
 
 
