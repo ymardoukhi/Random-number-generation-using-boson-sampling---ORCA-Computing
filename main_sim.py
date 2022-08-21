@@ -81,26 +81,10 @@ def main():
     output_strs = jb.Parallel(n_jobs=-2, verbose=5)(
         jb.delayed(neumann_enc.von_neumann_prot)(shots) for shots in shots_ensemble)
 
-    # filter out '' strings
     output_strs = list(filter(lambda i: i != '', output_strs))
-    # calculate the ratio of 1's and 0's in the concatenation of
-    # all those binary strings
-    ratio = one_zero_ratio("".join(output_strs))
-    # calculate the statistics of the binary strings and sort 
-    # the probability of their appearance in a descending manner
-    output_strs = Counter(output_strs)
-    output_strs = [(key, val) for key, val in output_strs.items()]
-    output_strs.sort(key=lambda x: x[1], reverse=True)
-    output_strs = {el[0]: el[1]/args.N for el in output_strs}
-    
-    # save the statistics of 01 ratio and the binary strings
-    if not os.path.exists(output_path):
-        os.mkdir(output_path)
-    with open("{}/simulation_result_{}.json".format(output_path, args.N), "w") as f:
+    # same the output_strs for post analysis
+    with open("{}/output_strs_N{}.json".format(output_path, args.N), "w") as f:
         json.dump(output_strs, f)
-    with open("{}/ratio_simulation_{}.json".format(output_path, args.N), "w") as f:
-        json.dump(ratio, f)
-
 
 if __name__ == "__main__":
     main()
