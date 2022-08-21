@@ -77,7 +77,7 @@ def main():
 
     output_strs = list(filter(lambda i: i != '', output_strs))
     # same the output_strs for post analysis
-    with open("{}/output_strs_N{}.json".format(output_path, args.N), "w") as f:
+    with open("{}/vonneumann_strs_N{}.json".format(output_path, args.N), "w") as f:
         json.dump(output_strs, f)
 
 if __name__ == "__main__":
