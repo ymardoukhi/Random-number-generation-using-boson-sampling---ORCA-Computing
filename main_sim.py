@@ -38,11 +38,6 @@ def boson_sampler(n, m, num_params, v, seed):
     
     return eng.run(program=arch.prog, args=args_dict).samples[0]
 
-def one_zero_ratio(binary_string: str) -> dict:
-    binary_arr = np.asarray([*binary_string], dtype=int)
-    ratio = np.sum(binary_arr)/binary_arr.shape[0]
-    return {'0': 1-ratio, '1': ratio}
-
 def main():
     
     # parse the input arguments
