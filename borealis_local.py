@@ -1,4 +1,3 @@
-import os
 import json
 import numpy as np
 import joblib as jb
@@ -60,17 +59,23 @@ def main():
         },
     }
 
+    # initialise the Borealis programme
     borealis_prog = Programme(gate_args_dict=gate_args)
 
+    # get N samples and store them
     shots_ensemble = jb.Parallel(n_jobs=-2, verbose=5)(
         jb.delayed(borealis_sampler)(borealis_prog.prog) for _ in range(shots))
+    np.save("{}/samples_local_N{}.npy".format(output_path, shots), shots_ensemble)
     
+    # form tuples of shots such that we can apply the 
+    # von Neumann post processing in a parallel fashion
     shots_ensemble = [
         (shots_ensemble[i][0], shots_ensemble[i+1][0]) 
         for i in range(len(shots_ensemble) - 1)]
     
+    # initialise the von Neumann post-processing and 
+    # get the binary strings
     neumann_enc = VonNeumann()
-    
     output_strs = jb.Parallel(n_jobs=-2, verbose=5)(
         jb.delayed(neumann_enc.von_neumann_prot)(shots) for shots in shots_ensemble)
     
