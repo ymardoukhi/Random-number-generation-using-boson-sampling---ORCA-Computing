@@ -53,10 +53,7 @@ def main():
 
     # get the exact statistics of the fock states
     fock_states = exact_bose_samp(args.n, args.m, args.n_param, args.v)
-    ordered_fock_states = [(key, val) for key, val in fock_states.fock_dict.items()]
-    ordered_fock_states.sort(key=lambda x: x[1], reverse=True)
-    ordered_fock_states = {el[0]: el[1] for el in ordered_fock_states}
-    
+
     # store the fock states probabilities as a dictionary
     output_path = "./data/n{}_m{}_nparam{}_v{}".format(args.n, args.m, args.n_param, args.v)
     if not os.path.exists(output_path):
