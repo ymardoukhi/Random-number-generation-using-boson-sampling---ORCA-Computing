@@ -2,36 +2,43 @@ import os
 import json
 import numpy as np
 import joblib as jb
-from collections import Counter
 import strawberryfields as sf
-from strawberryfields.tdm import full_compile, get_mode_indices
-from strawberryfields.ops import Sgate, Rgate, BSgate, MeasureFock
+from collections import Counter
+from src.Borealis import Programme
 from src.PostProcessing import VonNeumann
 
-def get_best_matach_params(gate_args_dict):
-    eng = sf.RemoteEngine("borealis")
-    device = eng.device
-
-    gate_args_list = full_compile(gate_args_dict, device)
-
-    return gate_args_list
-
-def local_borealis_sim(gate_args_list, n, N, delays):
+def borealis_sampler(prog: sf.program.Program) -> np.ndarray:
+    """
+    function that gets a Borealis programme and run it on 
+    a local "gaussian" engine. It returns a fock state 
+    sample of numpy array type
     
-    prog = sf.TDMProgram(N)
-
-    with prog.context(*gate_args_list) as (p, q):
-        Sgate(p[0]) | q[n[0]]
-        for i in range(len(delays)):
-            Rgate(p[2 * i + 1]) | q[n[i]]
-            BSgate(p[2 * i + 2], np.pi / 2) | (q[n[i + 1]], q[n[i]])
-        MeasureFock() | q[0]
-
+    input:
+        prog (strawberryfields.program.Program): Borealis 
+            Strawberryfields programme
+    return:
+        _ (np.ndarray): a sample fockstate
+    """
+    
     eng = sf.Engine(backend="gaussian")
     return eng.run(prog, crop=True).samples[0]
 
 def one_zero_ratio(binary_string: str) -> dict:
+    """
+    a function that calculates the ration between zeros 
+    and ones in a binary string
+
+    input:
+        binary_string (str): a given binary string e.g. 010001
+    
+    return:
+        _ (dict): dictionary of the form {'0': 1-ratio, '1': ratio} 
+            where ration is the ration between zeros and ones
+    """
+    # convert the binary strings into an array of zero and 
+    # one integers
     binary_arr = np.asarray([*binary_string], dtype=int)
+    # sum is the total number of ones
     ratio = np.sum(binary_arr)/binary_arr.shape[0]
     return {'0': 1-ratio, '1': ratio}
 
@@ -39,7 +46,8 @@ def one_zero_ratio(binary_string: str) -> dict:
 def main():
 
     modes = 4
-    shots = int(1e4)
+    shots = int(1e2)
+    output_path = "./data/borealis"
 
     # squeezing-gate parameters
     r = [1.234] * modes
@@ -72,12 +80,10 @@ def main():
         },
     }
 
-    gate_args_list = get_best_matach_params(gate_args_dict=gate_args)
-
-    n, N = get_mode_indices(delays)
+    borealis_prog = Programme(gate_args_dict=gate_args)
 
     shots_ensemble = jb.Parallel(n_jobs=-2, verbose=5)(
-        jb.delayed(local_borealis_sim)(gate_args_list, n, N, delays) for _ in range(shots))
+        jb.delayed(borealis_sampler)(borealis_prog.prog) for _ in range(shots))
     
     shots_ensemble = [
         (shots_ensemble[i][0], shots_ensemble[i+1][0]) 
@@ -90,6 +96,9 @@ def main():
     
     # filter out '' strings
     output_strs = list(filter(lambda i: i != '', output_strs))
+    # same the output_strs for post analysis
+    with open("{}/output_strs_local_N{}.json".format(output_path, shots), "w") as f:
+        json.dump(output_strs, f)
     # calculate the ratio of 1's and 0's in the concatenation of
     # all those binary strings
     ratio = one_zero_ratio("".join(output_strs))
@@ -101,7 +110,6 @@ def main():
     output_strs = {el[0]: el[1]/shots/2 for el in output_strs}
     
     # save the statistics of 01 ratio and the binary strings
-    output_path = "./data/borealis"
     if not os.path.exists(output_path):
         os.mkdir(output_path)
     with open("{}/local_N{}.json".format(output_path, shots), "w") as f:
