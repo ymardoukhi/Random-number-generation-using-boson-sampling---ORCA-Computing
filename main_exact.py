@@ -59,7 +59,7 @@ def main():
     if not os.path.exists(output_path):
         os.mkdir(output_path)
     with open("{}/exact_result.json".format(output_path), "w") as f:
-        json.dump(ordered_fock_states, f)
+        json.dump(fock_states, f)
 
 if __name__ == "__main__":
     main()
