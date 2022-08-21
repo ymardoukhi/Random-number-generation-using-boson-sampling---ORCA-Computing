@@ -63,9 +63,21 @@ def main():
 
     # get N binary strings via Von Neumann protocol in parallel
     print("Simulation has started for {} runs".format(args.N))
-    output_strs = jb.Parallel(n_jobs=-2, verbose=5)(
-        jb.delayed(von_neumann_sim)(
+    shots_ensemble = jb.Parallel(n_jobs=-2, verbose=5)(
+        jb.delayed(boson_sampler)(
             args.n, args.m, args.n_param, args.v, seed) for seed in seeds)
+    
+    # form tuples of shots such that we can apply the 
+    # von Neumann post processing in a parallel fashion
+    shots_ensemble = [
+        (shots_ensemble[i][0], shots_ensemble[i+1][0]) 
+        for i in range(len(shots_ensemble) - 1)]
+    
+    # initialise the von Neumann post-processing and 
+    # get the binary strings
+    neumann_enc = VonNeumann()
+    output_strs = jb.Parallel(n_jobs=-2, verbose=5)(
+        jb.delayed(neumann_enc.von_neumann_prot)(shots) for shots in shots_ensemble)
 
     # filter out '' strings
     output_strs = list(filter(lambda i: i != '', output_strs))
