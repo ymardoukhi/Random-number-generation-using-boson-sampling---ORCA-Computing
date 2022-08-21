@@ -1,4 +1,5 @@
 import numpy as np
+import networkx as nx
 
 class PostEncoding:
     """
@@ -6,40 +7,132 @@ class PostEncoding:
     the output of a Boson Sampler
     """
 
-    def __init__(self, encoding: dict=None) -> None:
+    def __init__(self) -> None:
         """
         input:
             encoding (dict): is a dictionary of the form {'(n_1, n_2, ..., n_m)': '0101...001'}
                 that maps a fock state onto a binary string
         """
-        self.encoding = encoding
+        self.encoding = None
 
-class Huffman(PostEncoding):
+class HuffmanEncoding(PostEncoding):
     """
-    sub-class of PostEncoding that uses the Huffman encoding scheme
-    to encode the fock states into binary strings
-    """
-
-    def __init__(self, encoding: dict = None) -> None:
-        super().__init__(encoding)
+    class to construct Huffman encoding scheme given a probability 
+    distribution over a set of symbols (alphabets)
     
-    def huffman(self, fock_state: str) -> str:
+    input:
+        nodes_dict (dict): a dictionary of symbols with their 
+            associated probability of occurance
+    """
+
+    def __init__(self, nodes_dict: dict) -> None:
+        super().__init__()
+        self.nodes_dict = nodes_dict
+        self.graph = self._graph()
+        self.root = ''
+    
+    def _graph(self):
         """
-        function that return the binary string of a fock state 
-        according to the Huffman encoding scheme
-        
+        function that initialises a trivial graph (has only nodes) 
+        given a set of symbols
+
         input:
-            fock_state (str): a given fock state given in the form of '(n_1, n_2, ..., n_m)' 
-                i.e. string of a tuple
+            None
         return:
-            _ (str): the Huffman encoding of the input fock state
+            G (nx.classes.graph.Graph): a networkx graph which its 
+                nodes are the set of symbols
         """
-        return self.encoding[fock_state]
+        G = nx.Graph()
+        G.add_nodes_from(list(self.nodes_dict.keys()))
+        return G
+    
+    def _huffman_encoding_tree(self):
+        """
+        implementation of the Huffman encoding scheme. See 
+        Introduction to Coding and Information written by Roman 
+        Springer Verlag
+
+        This function updates the graph G having only symobls as 
+        its nodes and iteratively addes edges between the nodes 
+        until a tree is constructed and the nodes are all merged 
+        to get the root of the tree
+
+        input:
+            None
+        return:
+            None
+        """
+        nodes_prob_ls = [ (key, val) for key, val in self.nodes_dict.items() ]
+
+        while len(nodes_prob_ls) > 1:
+            left_node = min(nodes_prob_ls, key=lambda el: el[1])
+            nodes_prob_ls.remove(left_node)
+            right_node = min(nodes_prob_ls, key=lambda el: el[1])
+            nodes_prob_ls.remove(right_node)
+            new_node = left_node[0] + right_node[0]
+            self.graph.add_node(new_node)
+            self.graph.add_edge(left_node[0], new_node, label='0')
+            self.graph.add_edge(right_node[0], new_node, label='1')
+            nodes_prob_ls.append((new_node, left_node[1] + right_node[1]))
+
+        self.root = nodes_prob_ls[0][0]
+    
+    def _label_extractor(self, path):
+        """
+        a helper function that extracts the lable of the edges 
+        connecting two nodes in a graph G
+
+        input:
+            path (list): list of the nodes that indicates a path 
+                between two given nodes
+        return:
+            _ (str): binary string that sequentially shows the 
+                label of the edges connecting the two nodes in 
+                "path"
+        """
+        path_list = [ self.graph.get_edge_data(path[i], path[i+1])['label'] for i in range(len(path)-1) ]
+        return "".join(path_list)
+
+    def _swapped_encoding(self, bin_str):
+        """
+        a helper function that swaps a binary string
+
+        input:
+            bin_str (str): binary string
+        return:
+            _ (str): swapped binary string
+        """
+        swapped_arr = -1*(np.asarray([*bin_str], dtype=int) - 1)
+        return "".join(list(map(str, swapped_arr)))
+
+    def huffman_encoding(self):
+        """
+        function that constructs the binary string encoding of the 
+        symbols based on the Huffman encoding
+
+        input:
+            None
+        return:
+            None
+        """
+        # construct the Huffman encoding tree
+        self._huffman_encoding_tree()
+        # for each node in the list of symbols 
+        # find the shortest path between the root 
+        # and the node and the label of the edges 
+        # this shortest path is the encoding of that 
+        # very node
+        node_encoding = {}
+        for node in self.nodes_dict.keys():
+            path = nx.shortest_path(self.graph, self.root, node)
+            code = self._label_extractor(path)
+            node_encoding[node] = (code, self._swapped_encoding(code))
+        self.encoding = node_encoding
 
 class Permutation(PostEncoding):
 
-    def __init__(self, encoding: dict = None) -> None:
-        super().__init__(encoding)
+    def __init__(self) -> None:
+        super().__init__()
 
 class VonNeumann(PostEncoding):
     """
@@ -47,8 +140,8 @@ class VonNeumann(PostEncoding):
     of the fock states of a Boson Sampler
     """
 
-    def __init__(self, encoding: dict = None) -> None:
-        super().__init__(encoding)
+    def __init__(self) -> None:
+        super().__init__()
 
     def _convert_binary(self, array: np.ndarray) -> str:
         """
