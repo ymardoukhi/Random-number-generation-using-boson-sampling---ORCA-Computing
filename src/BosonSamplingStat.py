@@ -39,7 +39,7 @@ class FockProb:
             (str(tuple(indices[:, i])),
             self.data.all_fock_probs()[tuple(indices[:, i])]) for i in range(indices.shape[1])
             ]
-        tuple_prob = tuple_prob.sort(key=lambda x: x[1])
+        tuple_prob = tuple_prob.sort(key=lambda x: x[1], reverse=True)
         # convert the tuple to dictionary
         return {el[0]: el[1] for el in tuple_prob}
         
