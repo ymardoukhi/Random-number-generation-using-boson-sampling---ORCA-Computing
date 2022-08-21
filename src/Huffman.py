@@ -1,3 +1,4 @@
+import numpy as np
 import networkx as nx
 
 class HuffmanEncoding:
@@ -78,6 +79,18 @@ class HuffmanEncoding:
         path_list = [ self.graph.get_edge_data(path[i], path[i+1])['label'] for i in range(len(path)-1) ]
         return "".join(path_list)
 
+    def _swapped_encoding(self, bin_str):
+        """
+        a helper function that swaps a binary string
+
+        input:
+            bin_str (str): binary string
+        return:
+            _ (str): swapped binary string
+        """
+        swapped_arr = -1*(np.asarray([*bin_str], dtype=int) - 1)
+        return "".join(list(map(str, swapped_arr)))
+
     def huffman_encoding(self):
         """
         function that constructs the binary string encoding of the 
@@ -99,5 +112,5 @@ class HuffmanEncoding:
         for node in self.nodes_dict.keys():
             path = nx.shortest_path(self.graph, self.root, node)
             code = self._label_extractor(path)
-            node_encoding[node] = code
+            node_encoding[node] = (code, self._swapped_encoding(code))
         self.encoding = node_encoding
