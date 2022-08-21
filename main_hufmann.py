@@ -1,7 +1,7 @@
 import json
 import argparse
 import numpy as np
-from src.Huffman import HuffmanEncoding
+from src.PostProcessing import HuffmanEncoding
 
 def main():
 
