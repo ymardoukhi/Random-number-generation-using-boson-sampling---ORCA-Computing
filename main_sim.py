@@ -72,7 +72,7 @@ def main():
     # form tuples of shots such that we can apply the 
     # von Neumann post processing in a parallel fashion
     shots_ensemble = [
-        (shots_ensemble[i][0], shots_ensemble[i+1][0]) 
+        (shots_ensemble[i], shots_ensemble[i+1]) 
         for i in range(len(shots_ensemble) - 1)]
     
     # initialise the von Neumann post-processing and 
