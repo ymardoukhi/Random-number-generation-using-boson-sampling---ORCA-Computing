@@ -54,6 +54,7 @@ def main():
     parser.add_argument('v', type=int, help='version of the architecture')
     parser.add_argument('N', type=int, help="total number of runs")
     args = parser.parse_args()
+    output_path = "./data/n{}_m{}_nparam{}_v{}".format(args.n, args.m, args.n_param, args.v)
 
     # generate N random seeds where N is the total number of simulations
     # fixed the seed of the RNG such that I get N perdictable seeds for 
@@ -66,7 +67,8 @@ def main():
     shots_ensemble = jb.Parallel(n_jobs=-2, verbose=5)(
         jb.delayed(boson_sampler)(
             args.n, args.m, args.n_param, args.v, seed) for seed in seeds)
-    
+    np.save("{}/samples_N{}.npy".format(output_path, args.N), shots_ensemble)
+
     # form tuples of shots such that we can apply the 
     # von Neumann post processing in a parallel fashion
     shots_ensemble = [
@@ -92,7 +94,6 @@ def main():
     output_strs = {el[0]: el[1]/args.N for el in output_strs}
     
     # save the statistics of 01 ratio and the binary strings
-    output_path = "./data/n{}_m{}_nparam{}_v{}".format(args.n, args.m, args.n_param, args.v)
     if not os.path.exists(output_path):
         os.mkdir(output_path)
     with open("{}/simulation_result_{}.json".format(output_path, args.N), "w") as f:
