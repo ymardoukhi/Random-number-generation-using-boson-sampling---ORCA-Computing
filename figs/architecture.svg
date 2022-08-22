@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="297mm"
+   height="210mm"
+   viewBox="0 0 297 210"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
+   sodipodi:docname="architecture.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.7764649"
+     inkscape:cx="351.94513"
+     inkscape:cy="227.61785"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="true"
+     inkscape:window-width="1916"
+     inkscape:window-height="1029"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid10" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:none;stroke:#5f5f5f;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 31.75,47.624999 H 185.20833"
+       id="path12" />
+    <path
+       style="fill:none;stroke:#5f5f5f;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 31.75,63.499999 H 185.20833"
+       id="path14" />
+    <path
+       style="fill:none;stroke:#5f5f5f;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 31.75,79.374999 H 185.20833"
+       id="path16" />
+    <path
+       style="fill:none;stroke:#5f5f5f;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 31.75,95.249999 H 185.20833"
+       id="path18" />
+    <circle
+       style="fill:#d35f5f;fill-rule:evenodd;stroke-width:0.264583"
+       id="path20"
+       cx="23.8125"
+       cy="47.624996"
+       r="2.6458333" />
+    <circle
+       style="fill:#d35f5f;fill-rule:evenodd;stroke-width:0.264583"
+       id="path22"
+       cx="23.8125"
+       cy="63.5"
+       r="2.6458333" />
+    <circle
+       style="fill:#d35f5f;fill-rule:evenodd;stroke-width:0.264583"
+       id="path24"
+       cx="23.8125"
+       cy="79.904167"
+       r="2.6458333" />
+    <circle
+       style="fill:#d35f5f;fill-rule:evenodd;stroke-width:0.264583"
+       id="path26"
+       cx="23.8125"
+       cy="95.25"
+       r="2.6458333" />
+    <rect
+       style="fill:#f6f875;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+       id="rect33"
+       width="21.166666"
+       height="26.458332"
+       x="52.916664"
+       y="42.333332"
+       ry="5.2916679" />
+    <rect
+       style="fill:#f6f875;fill-rule:evenodd;stroke-width:1;stroke:#000000;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1"
+       id="rect35"
+       width="21.166666"
+       height="26.458332"
+       x="52.916664"
+       y="74.083336"
+       ry="5.2916641" />
+    <rect
+       style="fill:#f6f875;fill-rule:evenodd;stroke-width:1;stroke:#000000;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1"
+       id="rect37"
+       width="21.166666"
+       height="26.458332"
+       x="95.25"
+       y="58.208332"
+       ry="5.2916679" />
+    <rect
+       style="fill:#f6f875;fill-rule:evenodd;stroke-width:1;stroke:#000000;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1"
+       id="rect39"
+       width="21.166666"
+       height="26.458332"
+       x="137.58333"
+       y="42.333332"
+       ry="5.2916679" />
+    <rect
+       style="fill:#f6f875;fill-rule:evenodd;stroke-width:1;stroke:#000000;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1"
+       id="rect41"
+       width="21.166666"
+       height="26.458332"
+       x="137.58333"
+       y="74.083336"
+       ry="5.2916641" />
+    <circle
+       style="fill:#4f7dcf;fill-rule:evenodd;stroke-width:0.264583;fill-opacity:1"
+       id="path53"
+       sodipodi:type="arc"
+       sodipodi:cx="47.625"
+       sodipodi:cy="-185.20912"
+       sodipodi:rx="5.2916665"
+       sodipodi:ry="5.2916665"
+       sodipodi:start="3.1415927"
+       sodipodi:end="0"
+       sodipodi:arc-type="slice"
+       d="m 42.333333,-185.20912 a 5.2916665,5.2916665 0 0 1 5.291667,-5.29167 5.2916665,5.2916665 0 0 1 5.291667,5.29167 H 47.625 Z"
+       transform="rotate(90)" />
+    <circle
+       style="fill:#4f7dcf;fill-rule:evenodd;stroke-width:0.264583;fill-opacity:1"
+       id="path53-3"
+       sodipodi:type="arc"
+       sodipodi:cx="63.500015"
+       sodipodi:cy="-185.20912"
+       sodipodi:rx="5.2916665"
+       sodipodi:ry="5.2916665"
+       sodipodi:start="3.1415927"
+       sodipodi:end="0"
+       sodipodi:arc-type="slice"
+       transform="rotate(90)"
+       d="m 58.208349,-185.20912 a 5.2916665,5.2916665 0 0 1 5.291666,-5.29167 5.2916665,5.2916665 0 0 1 5.291667,5.29167 h -5.291667 z" />
+    <circle
+       style="fill:#4f7dcf;fill-rule:evenodd;stroke-width:0.264583;fill-opacity:1"
+       id="path53-6"
+       sodipodi:type="arc"
+       sodipodi:cx="79.375031"
+       sodipodi:cy="-185.20912"
+       sodipodi:rx="5.2916665"
+       sodipodi:ry="5.2916665"
+       sodipodi:start="3.1415927"
+       sodipodi:end="0"
+       sodipodi:arc-type="slice"
+       transform="rotate(90)"
+       d="m 74.083364,-185.20912 a 5.2916665,5.2916665 0 0 1 5.291667,-5.29167 5.2916665,5.2916665 0 0 1 5.291666,5.29167 h -5.291666 z" />
+    <circle
+       style="fill:#4f7dcf;fill-rule:evenodd;stroke-width:0.264583;fill-opacity:1"
+       id="path53-6-5"
+       sodipodi:type="arc"
+       sodipodi:cx="95.250046"
+       sodipodi:cy="-185.20912"
+       sodipodi:rx="5.2916665"
+       sodipodi:ry="5.2916665"
+       sodipodi:start="3.1415927"
+       sodipodi:end="0"
+       sodipodi:arc-type="slice"
+       transform="rotate(90)"
+       d="m 89.958379,-185.20912 a 5.2916665,5.2916665 0 0 1 5.291667,-5.29167 5.2916665,5.2916665 0 0 1 5.291664,5.29167 h -5.291664 z" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.29167px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="53.135754"
+       y="57.271496"
+       id="text929"><tspan
+         sodipodi:role="line"
+         id="tspan927"
+         x="53.135754"
+         y="57.271496"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.29167px;font-family:Comfortaa;-inkscape-font-specification:Comfortaa;stroke-width:0.264583">BSGate</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.29167px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="53.135754"
+       y="89.55069"
+       id="text929-4"><tspan
+         sodipodi:role="line"
+         id="tspan927-7"
+         x="53.135754"
+         y="89.55069"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.29167px;font-family:Comfortaa;-inkscape-font-specification:Comfortaa;stroke-width:0.264583">BSGate</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.29167px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="95.469124"
+       y="73.675674"
+       id="text929-2"><tspan
+         sodipodi:role="line"
+         id="tspan927-1"
+         x="95.469124"
+         y="73.675674"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.29167px;font-family:Comfortaa;-inkscape-font-specification:Comfortaa;stroke-width:0.264583">BSGate</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.29167px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="137.80231"
+       y="57.271492"
+       id="text929-2-1"><tspan
+         sodipodi:role="line"
+         id="tspan927-1-4"
+         x="137.80231"
+         y="57.271492"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.29167px;font-family:Comfortaa;-inkscape-font-specification:Comfortaa;stroke-width:0.264583">BSGate</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.29167px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="137.80231"
+       y="89.021523"
+       id="text929-2-1-0"><tspan
+         sodipodi:role="line"
+         id="tspan927-1-4-1"
+         x="137.80231"
+         y="89.021523"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.29167px;font-family:Comfortaa;-inkscape-font-specification:Comfortaa;stroke-width:0.264583">BSGate</tspan></text>
+  </g>
+</svg>
