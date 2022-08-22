@@ -1,4 +1,5 @@
 import json
+import argparse
 import numpy as np
 import joblib as jb
 import strawberryfields as sf
@@ -25,8 +26,15 @@ def borealis_sampler(prog: sf.program.Program, shots: int) -> np.ndarray:
 
 def main():
 
-    modes = 4
-    shots = int(1e4)
+    # parse the input arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('m', type=int, help='number of modes')
+    parser.add_argument('N', type=int, help="total number of runs")
+    args = parser.parse_args()
+
+    # number of the modes, shots and the storage path
+    modes = args.m
+    shots = args.N
     output_path = "./data/borealis"
 
     # squeezing-gate parameters
