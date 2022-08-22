@@ -1,6 +1,3 @@
 .ipynb_checkpoints
 .vscode
-*.png
 *__pycache__
-*.npy
-*.json
