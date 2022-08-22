@@ -1,3 +1,4 @@
+import os
 import json
 import argparse
 import numpy as np
@@ -16,6 +17,8 @@ def main():
 
     # set the data path to load the simulation results
     data_path = "data/n{}_m{}_nparam{}_v{}".format(args.n, args.m, args.n_param, args.v)
+    if not os.path.exists(data_path):
+        raise FileNotFoundError("path {} does not exists".format(data_path))
 
     # load the exact fock state distribution and the fock state
     # samples generated previously by a Boson sampler

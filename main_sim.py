@@ -1,3 +1,4 @@
+import os
 import json
 import argparse
 import numpy as np
@@ -48,7 +49,11 @@ def main():
     parser.add_argument('v', type=int, help='version of the architecture')
     parser.add_argument('N', type=int, help="total number of runs")
     args = parser.parse_args()
+
+    # set the working directory and create it if does not exist
     output_path = "./data/n{}_m{}_nparam{}_v{}".format(args.n, args.m, args.n_param, args.v)
+    if not os.path.exists(output_path):
+        os.mkdir(output_path)
 
     # generate N random seeds where N is the total number of simulations
     # fixed the seed of the RNG such that I get N perdictable seeds for 
