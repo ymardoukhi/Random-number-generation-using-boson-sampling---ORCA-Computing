@@ -18,7 +18,7 @@ def nist_plot(n: int, m: int, param: int, v: int, protocol: str) -> None:
     """
     tests = ["SingleTests", "RandomExcursions", "CumulativeSums", "RandomExcursionsVariant", "NonOverlappingTemplate"]
 
-    fig = plt.figure(figsize=(20, 10))
+    fig = plt.figure()
     spec = fig.add_gridspec(3, 2)
 
     for ind, test in enumerate(tests):
@@ -43,6 +43,7 @@ def nist_plot(n: int, m: int, param: int, v: int, protocol: str) -> None:
             ax.set_xticks([])
             ax.set_xticklabels([])
             ax.set_title(test)
+        ax.hlines(y=0.01, xmin=0.0, xmax=len(data.index) ,linestyle='--', color="#9e2b3c")
     
     plt.tight_layout()
     plt.show()
