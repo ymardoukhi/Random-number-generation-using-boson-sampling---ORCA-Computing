@@ -150,7 +150,7 @@ The following shows how to proceed with the test suit. Parts that we have to pro
     [6] Modular Exponentiation     [7] Blum-Blum-Shub
     [8] Micali-Schnorr             [9] G Using SHA-1
 
-   Enter Choice: 0 <- HERE WE PASS 0 TO INDICATE THAT WE WANT TO ANALYSE AN INPUT BINARY FILE
+   Enter Choice: 0 <- HERE WE PASS 0 TO INDICATE THAT WE WANT TO ANALYSE A BINARY INPUT FILE
 
 
 		User Prescribed Input File: ../boson-sampling/data/n4_m4_nparam5_v0/vonneumann.bin <- INPUT FILE
@@ -192,4 +192,55 @@ The following shows how to proceed with the test suit. Parts that we have to pro
 
    Select input mode:  0 <- OUR FILE IS AN ASCII OF 0 AND 1
 ```
-This will perform all the statistical tests on the binary file. The result is 
+This will perform all the statistical tests on the binary file. The result gets stored in `<path to STA suit>/experiments/AlgorithmTesting/finalAnalysisReport.txt`. The content of a sample report may look like the following
+
+```
+------------------------------------------------------------------------------
+RESULTS FOR THE UNIFORMITY OF P-VALUES AND THE PROPORTION OF PASSING SEQUENCES
+------------------------------------------------------------------------------
+   generator is <../boson-sampling/data/n4_m4_nparam5_v0/vonneumann.bin>
+------------------------------------------------------------------------------
+ C1  C2  C3  C4  C5  C6  C7  C8  C9 C10  P-VALUE  PROPORTION  STATISTICAL TEST
+------------------------------------------------------------------------------
+  0   0   0   0   0   0   0   0   0 110  0.000000 *  110/110     Frequency
+  0   0   0   0   0   0   0   0   0 110  0.000000 *  110/110     BlockFrequency
+  0   0   0   0   0   0   0   0   0 110  0.000000 *  110/110     CumulativeSums
+  0   0   0   0   0   0   0   0   0 110  0.000000 *  110/110     CumulativeSums
+110   0   0   0   0   0   0   0   0   0  0.000000 *    0/110  *  Runs
+110   0   0   0   0   0   0   0   0   0  0.000000 *    0/110  *  LongestRun
+ 13  12  14  15   7  10  10  13   7   9  0.684327    109/110     Rank
+110   0   0   0   0   0   0   0   0   0  0.000000 *    0/110  *  FFT
+110   0   0   0   0   0   0   0   0   0  0.000000 *   30/110  *  NonOverlappingTemplate
+ 10  10  10   9   9  14  17  11  12   8  0.739918    107/110     NonOverlappingTemplate
+ 79  22   6   2   0   0   1   0   0   0  0.000000 *   98/110  *  NonOverlappingTemplate
+110   0   0   0   0   0   0   0   0   0  0.000000 *    0/110  *  OverlappingTemplate
+110   0   0   0   0   0   0   0   0   0  0.000000 *    0/110  *  Universal
+110   0   0   0   0   0   0   0   0   0  0.000000 *    0/110  *  ApproximateEntropy
+110   0   0   0   0   0   0   0   0   0  0.000000 *    0/110  *  RandomExcursions
+  0   0   0   0   0   0   0   0   0   0     ----     ------     RandomExcursionsVariant
+ 24   1   2   1   0   0   0   0   0   0  0.000000 *   22/28   *  RandomExcursionsVariant
+110   0   0   0   0   0   0   0   0   0  0.000000 *    0/110  *  Serial
+110   0   0   0   0   0   0   0   0   0  0.000000 *    0/110  *  Serial
+ 17   7   6  12  11  15  10   6  10  16  0.150649    107/110     LinearComplexity
+
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+The minimum pass rate for each statistical test with the exception of the
+random excursion (variant) test is approximately = 105 for a
+sample size = 110 binary sequences.
+
+The minimum pass rate for the random excursion (variant) test is undefined.
+
+For further guidelines construct a probability table using the MAPLE program
+provided in the addendum section of the documentation.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+```
+There are two important columns, _P-VALUE_ and _PROPORTION_. At the bottom of the file it is seen that a test is passed if out of 110 binary strings, at least 105 of them must fulfil the test. Otherwise, the test gets failed. If the proportion is for instance $104/110$ then this is indicated by a *. The same applies to the _P-VALUE_ column. The _p-value_ of a test must be $>0.01$ in order for the test to get passed. If the _p-value_ is smaller than this value, then an asterisk * appears near the test. Thus, for a test to get passed, both of these must fulfil their criteria.
+
+The output file is then moved to `data/n4_m4_nparam5_v0/nist_vonneuman.txt`. Similar results for the Huffman encoding scheme and the permutation encoding are stored under the names `nist_huffman.txt` and `nist_permutation.txt` respectively.
+
+*__hint on choosing the length and the number of bitstreams:__* when running the NIST test suit, the user must choose the length of the binary strings and how many of those are there in a binary file. We want to chose a length at which the binary string has an equal number of `0` bits and `1` bits i.e. the digit `0` and the digit `1` appear equally. This can be done by counting the number of zeros and ones at different lengths and choose the smallest value (for instance have a look at `analysis.ipynb` file to see at which length scales the ration between zeros and one asymptotically reaches unity). Let us call this $L$. Then we turn back to your binary file, let's say `vonneuman.bin`. We count the total number of bits in this file and denote it by $T$. Then the total number of binary strings is given by 
+
+$$
+  n = \left\lfloor\frac{T}{L}\right\rfloor
+$$
