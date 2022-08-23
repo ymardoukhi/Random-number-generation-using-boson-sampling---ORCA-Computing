@@ -27,17 +27,23 @@ We use NIST SP800-22 test suit [[4]](https://csrc.nist.gov/publications/detail/s
 ├── data                        -> Main simulation data storage
 │   ├── borealis                -> Borealis cloud and local simulation results
 │   └── n4_m4_nparam5_v0        -> BS simulation results using fock backend
+│       └── nist                -> Stores the output results of the NIST SP800-22 tests
 ├── figs                        -> Figures for README.md and analysis.ipynb file
+├── full_sim.sh                 -> Script than runs a full simulation for multimode linear BS
 ├── main_exact.py               -> Calculate the exact probabilities of the Fock states
 ├── main_hufmann.py             -> Post-processing of BS Fock states using Huffman Encoding
 ├── main_permutation.py         -> Post-processing of BS Fock states using permutation symmetry
 ├── main_sim.py                 -> Simulate BS using fock backend
 ├── main_tf.py                  -> Experimental: tune the BSGates to yield higher entropy
+├── nist_extractor.sh           -> Bash script that extracts results of different test from NIST STS output
+├── papers                      -> Folder where relevant papers are stored for further reading
 ├── README.md                   -> This readme file
+├── requirements.txt            -> pip requirements for initialising the python environment
 └── src                         -> Libraries
     ├── Architecture.py         -> Initialise the architecture of a BS
     ├── Borealis.py             -> Initialise the Borealis device on Xanadu cloud
     ├── BosonSamplingStat.py    -> Tools to analyse the disribution of Fock states
+    ├── NIST.py                 -> Source for plotting NIST results
     ├── PostAnalysis.py         -> Tools to analyse a set of binary stream 
     └── PostProcessing.py       -> Post-processing methods Von Neumann, Huffman and Permutation Symmetry
 ```
