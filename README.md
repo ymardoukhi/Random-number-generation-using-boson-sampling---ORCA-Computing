@@ -6,6 +6,7 @@
         * GitHub ID: [ymardoukhi](https://github.com/ymardoukhi)
         * Discord ID: Yousof#1948, 902571449041174598
         * Email: ymardoukhi@gmail.com
+* **Pitch Presenter**: Yousof Mardoukhi
 * **Challenge**: Random Number Generation Using Boson Sampling -- ORCA Computing
 ---
 ## Summary
