@@ -9,6 +9,8 @@
 * **Challenge**: Random Number Generation Using Boson Sampling -- ORCA Computing
 ---
 ## Summary
+__NOTE: for in-depth analysis of the results refer to <u>analysis.ipynb</u> file. This readme contains information on how to use this repository__
+
 This repository contains necessary scripts and libraries to simulate a Boson Sampler using [Strawberry Fields](https://strawberryfields.ai/) library developed by [Xanadu](https://www.xanadu.ai/). The aim is to encode, post-process or extract entropy out of the outcomes (Fock states) of a Boson Sampler (BS) such that we could get __True Uniform Random Binary Sequences__. The stress is put more on the post-processing of the BS outputs. We address three approaches here to generate random binary sequences
 1. Von Neumann debiasing [[1]](https://mcnp.lanl.gov/pdf_files/nbs_vonneumann.pdf) [[2]](https://arxiv.org/pdf/2206.02292.pdf)
 2. Huffman Encoding [[3]](https://link.springer.com/book/9780387947044)
