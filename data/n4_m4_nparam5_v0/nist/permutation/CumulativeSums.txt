@@ -1,0 +1,3 @@
+test	p-value
+CumulativeSums	0.816537
+CumulativeSums	0.350485

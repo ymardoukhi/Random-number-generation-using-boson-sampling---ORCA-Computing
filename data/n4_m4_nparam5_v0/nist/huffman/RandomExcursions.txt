@@ -1,0 +1,9 @@
+test	p-value
+RandomExcursions	0.000000
+RandomExcursions	0.000000
+RandomExcursions	0.000000
+RandomExcursions	0.000002
+RandomExcursions	0.000000
+RandomExcursions	0.000000
+RandomExcursions	0.000000
+RandomExcursions	0.000000

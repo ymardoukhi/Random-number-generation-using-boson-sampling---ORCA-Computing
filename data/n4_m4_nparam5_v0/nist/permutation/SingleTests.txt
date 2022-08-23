@@ -1,0 +1,9 @@
+test	p-value
+Frequency	0.096578
+BlockFrequency	0.534146
+Runs	0.319084
+LongestRun	0.534146
+Rank	0.419021
+FFT	0.657933
+Universal	0.000000
+LinearComplexity	0.153763
